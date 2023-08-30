@@ -1,7 +1,7 @@
 <div class="pl-3">
     <div class="flex flex-row">
         <div class="flex h-16 items-center text-2xl mt-[1px] ml-1">
-            Payments <span class="ml-2 italic text-gray-300 text-2xl">(Completed)</span>
+            Payments <span class="ml-2 italic text-gray-300 text-2xl" *ngIf="reservationData.paymentCompleted()">(Completed)</span>
         </div>
     </div>
     <div matDialogContent>
