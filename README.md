@@ -7,3 +7,4 @@ The app was created in order to automate the process of registering reservations
 ## Technology
 The app was developed using Nest.js and Prisma on backend, and Angular and Tailwind CSS on frontend. 
 
+Check the Wiki to see more of the app.
