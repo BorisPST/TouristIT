@@ -1,0 +1,68 @@
+<div class="pl-3">
+    <div class="flex flex-row">
+        <div class="flex h-16 items-center text-2xl mt-[1px] ml-1">
+            Payments <span class="ml-2 italic text-gray-300 text-2xl">(Completed)</span>
+        </div>
+    </div>
+    <div matDialogContent>
+        <div *ngFor="let payment of payments; index as i" class="flex flex-row mt-1">
+            <div class="flex flex-col h-8 flex-1">
+                {{ payment.date | date: 'd/M/y' }}
+            </div>
+            <div class="flex flex-col ml-5 h-8 flex-1">
+                {{ payment.amount | priceFormat }}€
+            </div>
+            <div class="flex flex-col h-8 items-center flex-1">
+                <i class="fa-regular fa-circle-xmark mt-1 ml-auto text-red-500" (click)="deletePayment(i)"></i>
+            </div>
+        </div>
+        <form (ngSubmit)="addPayment(paymentForm)" [formGroup]="paymentForm" *ngIf="!reservationData.paymentCompleted()">
+            <div class="flex flex-row mt-2">
+                <div class="flex flex-col">
+                    <input type="date" class="border-2 h-8" formControlName="date" required>
+                </div>
+                <div class="flex flex-col ml-5">
+                    <div class="flex flex-row items-center">
+                        <input type="number" class="w-24 h-8 border-2" formControlName="amount" required [(ngModel)]="inputAmount">€
+                    </div>
+                </div>
+                <div class="flex flex-col ml-5 h-8 items-center">
+                    <button class="w-16 h-8 bg-gray-200 hover:bg-gray-300 disabled:opacity-60 disabled:hover:bg-gray-200" type="submit" [disabled]="inputAmount > remainingAmount || !paymentForm.valid">ADD</button>
+                </div>
+                <div class="flex flex-col ml-5" *ngIf="(paymentForm.get('amount').touched || paymentForm.get('amount').dirty) && inputAmount > remainingAmount">
+                    <div class="flex flex-row h-8 text-red-500 items-center text-sm">
+                        Remaining amount exceeded
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div class="border-t-2 mt-2"></div>
+        <div class="flex flex-row mt-2">
+            <div class="flex flex-col">
+                <div class="flex flex-row mb-1">
+                    Payout:
+                </div>
+                <div class="flex flex-row mb-1">
+                    Total:
+                </div>
+                <div class="flex flex-row">
+                    Remaining:
+                </div>
+            </div>
+            <div class="flex flex-col ml-4">
+                <div class="flex flex-row mb-1">
+                    {{reservationData.payout | priceFormat }}€
+                </div>
+                <div class="flex flex-row mb-1">
+                    {{reservationData.amount | priceFormat }}€
+                </div>
+                <div class="flex flex-row">
+                    {{ !reservationData.paymentCompleted() ? remainingAmount : 0 | priceFormat }}€
+                </div>
+            </div>
+        </div>
+    </div>
+    <mat-dialog-actions>
+      <button mat-button matDialogClose class="ml-auto">Close</button>
+    </mat-dialog-actions>
+</div>

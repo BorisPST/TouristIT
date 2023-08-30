@@ -1,0 +1,172 @@
+<div class="w-full h-screen mt-10 flex flex-col" *ngIf="!reservationFormOpen">
+    <div class="flex flex-row w-11/12 lg:w-full pr-10 ml-5 lg:ml-10">
+        <div class="flex flex-col w-16 lg:w-20">
+            <div class="bg-gray-300 dark:bg-primary h-8 lg:h-10 flex justify-center items-center hover:cursor-pointer" (click)="yearsDropdownOpen = !yearsDropdownOpen">
+                <div class="lg:text-lg text-gray-500 leading-[2rem] lg:leading-[2.5rem] ml-3">{{yearsArray[currentYearIndex]}}</div>
+                <i class="fa-solid fa-angle-down fa-xs lg:fa-sm text-primary pl-1 pt-3"></i>
+            </div>
+            <div *ngIf="yearsDropdownOpen" class="flex flex-col w-16 lg:w-20 justify-center absolute z-50 mt-8 lg:mt-10 border-b-2 border-gray-300 dark:border-primary">
+                <div class="w-16 lg:w-20 flex justify-center lg:text-lg text-gray-300 leading-[2rem] lg:leading-[2.5rem] border-solid border-l-2 border-r-2 border-gray-300 dark:border-primary dark:text-primary" 
+                *ngFor="let year of yearsArray; index as i">
+                    <div class="w-16 lg:w-20 text-center hover:cursor-pointer bg-white dark:bg-primary-dark hover:bg-gray-200 dark:hover:bg-secondary hover:text-gray-500 dark:hover:text-primary-semidark" 
+                        *ngIf="i != currentYearIndex"
+                        (click)="selectYear(i)" >
+                        {{year}}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <input [(ngModel)]="inputQuery" type="text" placeholder="Search for reservations" class="border-solid border-2 border-gray-300 dark:border-primary outline-gray-300 dark:outline-primary text-secondary dark:text-white dark:bg-primary-dark w-[20rem] lg:w-[30rem] h-8 lg:h-10 pl-2 ml-5">
+        <div class="ml-5 flex flex-row">
+            <div class="flex flex-col w-10 min-[1250px]:w-20 mr-4">
+                <div class="bg-gray-300 dark:bg-primary h-8 lg:h-10 flex justify-center items-center hover:cursor-pointer" (click)="createNewReservation()">
+                    <div class="lg:text-lg text-gray-500 leading-[2rem] lg:leading-[2.5rem] hidden min-[1250px]:block">New</div>
+                    <i class="fa-solid fa-plus text-primary min-[1250px]:pl-2"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="w-full mt-10">
+        <div class="flex flex-row w-full" *ngIf="screenWidth > 800">
+            <div class="w-full pr-40 border-b-2 border-secondary dark:border-0 dark:border-b-2 text-gray-500 dark:border-white dark:bg-primary flex flex-col">
+                <div class="flex flex-row justify-items-center h-10 pl-10">
+                    <div class="flex flex-1 items-center pl-3 font-medium">
+                        Renter
+                    </div>
+                    <div class="flex flex-1 items-center font-medium" *ngIf="columnCarouselService.columnDisplayed(0)">
+                        <div class="border-r-[1px] border-secondary h-8 my-auto"></div>
+                        <div class="pl-3">
+                            Start
+                        </div>
+                    </div>
+                    <div class="flex flex-1 items-center font-medium" *ngIf="columnCarouselService.columnDisplayed(1)">
+                        <div class="border-r-[1px] border-secondary h-8 my-auto"></div>
+                        <div class="pl-3">
+                            End
+                        </div>
+                    </div>
+                    <div class="flex flex-1 items-center font-medium "  *ngIf="columnCarouselService.columnDisplayed(2)">
+                        <div class="border-r-[1px] border-secondary h-8 my-auto"></div>
+                        <div class="pl-3">
+                            Guest name
+                        </div>
+                    </div>
+                    <div class="flex flex-1 items-center font-medium"  *ngIf="columnCarouselService.columnDisplayed(3)">
+                        <div class="border-r-[1px] border-secondary h-8 my-auto"></div>
+                        <div class="pl-3">
+                            Persons
+                        </div>
+                    </div>
+                    <div class="flex flex-1 items-center font-medium"  *ngIf="columnCarouselService.columnDisplayed(4)">
+                        <div class="border-r-[1px] border-secondary h-8 my-auto"></div>
+                        <div class="pl-3">
+                            Amount
+                        </div>
+                    </div>
+                    <div class="flex flex-1 items-center font-medium"  *ngIf="columnCarouselService.columnDisplayed(5)">
+                        <div class="border-r-[1px] border-secondary h-8 my-auto"></div>
+                        <div class="pl-3">
+                            Payment type
+                        </div>
+                    </div>
+                    <div class="flex flex-1 items-center font-medium"  *ngIf="columnCarouselService.columnDisplayed(6)">
+                        <div class="border-r-[1px] border-secondary h-8 my-auto"></div>
+                        <div class="pl-3">
+                            Status
+                        </div>
+                    </div>
+                </div>  
+            </div>
+            <div class="flex flex-row absolute h-10 items-center right-5" *ngIf="columnCarouselService.carouselDisplayed()">
+                <div 
+                    class="flex justify-center items-center h-8 w-8 rounded-full bg-gray-200"
+                    [ngClass]="{'opacity-60 hover:cursor-default': columnCarouselService.carouselLeftDisabled(),
+                                'hover:cursor-pointer hover:bg-gray-300': !columnCarouselService.carouselLeftDisabled()}"
+                    (click)="columnCarouselService.slideCarouselLeft()">
+                    <i class="fa-solid fa-chevron-left text-gray-600"></i>
+                </div>
+                <div 
+                    class="flex justify-center items-center h-8 w-8 rounded-full bg-gray-200 ml-4"
+                    [ngClass]="{'opacity-60 hover:cursor-default': columnCarouselService.carouselRightDisabled(),
+                                'hover:cursor-pointer hover:bg-gray-300': !columnCarouselService.carouselRightDisabled()}"
+                    (click)="columnCarouselService.slideCarouselRight()">
+                    <i class="fa-solid fa-chevron-right text-gray-600"></i>
+                </div>
+            </div>
+        </div>
+        
+        <div *ngFor="let reservation of reservations | reservationFilter:inputQuery; index as i" class="w-full relative flex flex-row">
+            <div class="w-full pr-10 md800:pr-40 pl-5 md800:pl-10 md800:border-b-[1px] border-secondary md800:hover:cursor-pointer md800:hover:bg-gray-100 ">
+                <app-reservation 
+                    [reservationData]="reservation" 
+                    [isSelected]="i == selectedReservationIndex" 
+                    [columnCarouselService]="columnCarouselService" 
+                    [smallScreen]="screenWidth < 800"
+                    (click)="selectReservation(i)"></app-reservation>
+            </div>
+            <div #reservationMenuDropdown *ngIf="screenWidth > 800 || selectedReservationIndex == i">
+                <div class="absolute h-10 flex items-center hover:cursor-pointer right-11 md800:right-4 bottom-2 md800:bottom-auto">
+                    <div class="h-7 w-7 rounded-full flex justify-center items-center hover:bg-gray-200" (click)="openReservationMenuDropdown(i)">
+                        <i class="fa-solid fa-ellipsis-vertical text-primary text-lg"></i>
+                    </div>
+                </div>
+                <div *ngIf="screenWidth < 800 && selectedReservationIndex == i" class="absolute bottom-[0.85rem] right-20" (click)="openPaymentsModal(i)">
+                    <div class="h-7 w-7 rounded-full flex justify-center items-center hover:cursor-pointer hover:bg-gray-200">
+                        <i class="fa-solid fa-dollar-sign text-primary"></i>
+                    </div>
+                </div>
+                <div class="absolute right-14 md800:right-4 top-[10.5rem] md800:top-11 border-2 border-gray-400 rounded-lg z-50" *ngIf="selectedReservationMenuDropdownIndex == i">
+                    <div class="w-44 h-9 bg-white rounded-md flex flex-row items-center hover:bg-gray-200 hover:cursor-pointer" (click)="openDialogWithRef(deleteDialog)">
+                        <div class="ml-2">
+                            <div class="flex justify-center items-center hover:cursor-pointer">
+                                <i class="fa-solid fa-trash fa-sm text-primary"></i>
+                            </div>
+                        </div>
+                        <div class="ml-2">
+                            Delete
+                        </div>
+                    </div>
+                    <div class="w-44 h-9 bg-white rounded-md flex flex-row items-center hover:bg-gray-200 hover:cursor-pointer" (click)="editReservation(i)">
+                        <div class="ml-2">
+                            <div class="flex justify-center items-center hover:cursor-pointer">
+                                <i class="fa-solid fa-pen fa-sm text-primary"></i>
+                            </div>
+                        </div>
+                        <div class="ml-2">
+                            Edit
+                        </div>
+                    </div>
+                    <div *ngIf="screenWidth > 800" class="w-44 h-9 bg-white rounded-md flex flex-row items-center hover:bg-gray-200 hover:cursor-pointer" (click)="openPaymentsModal(i)">
+                        <div class="ml-2">
+                            <div class="flex justify-center items-center hover:cursor-pointer">
+                                <i class="fa-solid fa-dollar-sign fa-sm text-primary"></i>
+                            </div>
+                        </div>
+                        <div class="ml-2">
+                            Payments
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <ng-template #deleteDialog>
+                <div class="flex flex-row">
+                    <div class="flex h-16 items-center ml-4">
+                        <i class="fa-solid fa-triangle-exclamation fa-xl"></i>
+                    </div>
+                    <div class="flex h-16 items-center text-2xl mt-[1px] ml-1">
+                        Warning
+                    </div>
+                </div>
+                <div matDialogContent>
+                    <p>Are you sure you want to delete the reservation?</p>
+                    <p>This action can not be undone.</p>
+                </div>
+                <mat-dialog-actions>
+                  <button mat-button matDialogClose>Cancel</button>
+                  <button mat-button matDialogClose class="ml-auto" (click)="deleteReservation(i)">DELETE</button>
+                </mat-dialog-actions>
+            </ng-template>
+        </div>
+    </div>
+</div>
+<app-reservation-form *ngIf="reservationFormOpen" [reservationData]="getReservationFormData()" [isNewReservation]="creatingNewReservation" (closeForm)="closeReservationForm()"></app-reservation-form>

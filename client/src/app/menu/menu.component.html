@@ -1,0 +1,41 @@
+<i *ngIf="smallScreen"  class="fa-solid fa-bars fa-xl ml-2 text-primary absolute top-6 hover:cursor-pointer" (click)="showMenu()"></i>
+<aside *ngIf="!smallScreen || largeMenuDisplayed" class="absolute top-0 h-screen z-50 bg-primary sm:relative sm:top-auto dark:bg-tertiary">
+    <div *ngIf="largeMenuDisplayed" class="w-56 h-full overflow-y-auto text-white text-center relative">
+        <div 
+            [ngClass]="{'text-gray-300 bg-primary-semidark dark:bg-tertiary-dark': activeItem == 0}"
+            (click)="setActiveItem(0, 'home')"
+            class="font-medium rounded text-lg mt-5 h-12 flex items-center justify-center hover:bg-primary-semidark hover:cursor-pointer hover:text-gray-300 dark:hover:bg-tertiary-dark">
+            HOME
+        </div>
+    
+        <div 
+            [ngClass]="{'text-gray-300 bg-primary-semidark dark:bg-tertiary-dark': activeItem == 1}"
+            (click)="setActiveItem(1, 'reservations')"
+            class="font-medium rounded text-lg mt-1 h-12 flex items-center justify-center hover:bg-primary-semidark hover:cursor-pointer hover:text-gray-300 dark:hover:bg-tertiary-dark">
+            RESERVATIONS
+        </div>
+
+        <i class="fa-solid fa-angle-left text-white hover:cursor-pointer absolute bottom-7 z-30 sm:bottom-28 left-0 pl-40 w-full hover:text-gray-200" 
+        (click)="hideMenu()"></i>
+    </div>
+    <div *ngIf="!largeMenuDisplayed"  class="w-16 h-full overflow-y-auto text-white text-center relative">    
+        <div
+        class="font-medium rounded text-lg h-12 mt-5 flex items-center justify-center hover:bg-primary-semidark hover:cursor-pointer hover:text-gray-300 dark:hover:bg-tertiary-dark"
+        [ngClass]="{'text-gray-300 bg-primary-semidark dark:bg-tertiary-dark': activeItem == 0}"
+        (click)="setActiveItem(0)">
+            <i
+             class="fa-solid fa-house"></i>
+        </div>
+    
+        <div
+        class="font-medium rounded text-lg mt-1 h-12 flex items-center justify-center hover:bg-primary-semidark hover:cursor-pointer hover:text-gray-300 dark:hover:bg-tertiary-dark"
+        [ngClass]="{'text-gray-300 bg-primary-semidark dark:bg-tertiary-dark': activeItem == 1}"
+        (click)="setActiveItem(1)">
+            <i
+             class="fa-solid fa-calendar"></i>
+        </div>
+        <i 
+        class="fa-solid fa-angle-right text-white float-right hover:cursor-pointer absolute bottom-28 left-0 w-full hover:text-gray-200"
+        (click)="showMenu()"></i>
+    </div>
+</aside>

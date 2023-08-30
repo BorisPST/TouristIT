@@ -1,0 +1,8 @@
+<div [ngClass]="{'dark bg-primary-dark': darkModeEnabled}" class="max-h-screen w-screen overflow-hidden">
+    <app-header (onThemeChanged)="toggleDarkMode()"></app-header>
+    <div class="flex w-full">
+        <app-menu [screenWidth]="screenWidth" (sectionSelected)="selectSection($event)"></app-menu>
+        <app-home *ngIf="selectedSection == 'home'"></app-home>
+        <app-reservations *ngIf="selectedSection == 'reservations'" [screenWidth]="screenWidth" class="flex-auto mx-auto"></app-reservations>
+    </div>
+</div>

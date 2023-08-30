@@ -1,0 +1,10 @@
+<div class="flex flex-col mr-3 mb-5" [formGroup]="parentFormGroup">
+    <div class="flex flex-row ml-2 mb-1 font-medium text-[13px]">{{ title }}</div>
+    <div [ngClass]="{'rounded-b-none': dropdownOpen}" class="border-gray-200 outline-tertiary rounded border-2 ml-2 h-10 w-[21.25rem] flex flex-row items-center hover:cursor-pointer" (click)="dropdownOpen = !dropdownOpen">
+        <input required [ngModel]="selectedValue" formControlName="{{controlName}}" type="text" class="pl-3 h-8 w-32 border-none outline-none hover:cursor-pointer bg-white" readonly>
+        <i class="fa-solid fa-angle-down fa-xs lg:fa-sm pl-1 pt-3 pr-1 ml-auto"></i>
+    </div>
+    <div *ngIf="dropdownOpen" class="flex flex-col absolute z-50 mt-16 ml-2 w-[21.25rem] border-t-2 border-gray-200">
+        <div [ngClass]="{'rounded-b': i == values.length - 1}" class="pl-3 h-10 flex flex-row items-center w-full bg-white border-r-2 border-l-2 border-b-2 border-gray-200 hover:bg-gray-100 hover:cursor-pointer" *ngFor="let value of values; index as i" (click)="selectValue(value)">{{value}}</div>
+    </div>
+</div>

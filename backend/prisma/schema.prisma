@@ -1,0 +1,183 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Assistance {
+  id                     Int                      @id @default(autoincrement())
+  provider               String
+  type                   String
+  reservation_assistance Reservation_Assistance[]
+}
+
+model CostCenter {
+  id   Int    @id @default(autoincrement())
+  name String @db.VarChar(50)
+}
+
+model Expense {
+  id         Int          @id @default(autoincrement())
+  name       String
+  isSeasonal Boolean      @default(true)
+  type       Expense_Type
+}
+
+model MessageTemplate {
+  id   Int    @id @default(autoincrement())
+  name String
+  body String
+  type String
+}
+
+model Payment {
+  id            Int         @id @default(autoincrement())
+  reservationId Int
+  date          DateTime
+  amount        Decimal
+  reservation   Reservation @relation(fields: [reservationId], references: [id], map: "Payment_reservationId_fkey")
+
+  @@index([reservationId], map: "Payment_reservationId_fkey")
+}
+
+model Property {
+  id          Int           @id @default(autoincrement())
+  title       String        @db.VarChar(50)
+  address     String        @db.VarChar(80)
+  city        String        @db.VarChar(50)
+  description String        @db.VarChar(500)
+  renter      Renter[]
+  reservation Reservation[]
+}
+
+model Provision {
+  id                    Int                     @id @default(autoincrement())
+  title                 String                  @db.VarChar(50)
+  description           String                  @db.VarChar(500)
+  reservation_provision Reservation_Provision[]
+}
+
+model Renter {
+  id          Int           @id @default(autoincrement())
+  name        String        @db.VarChar(50)
+  propertyId  Int
+  oib         String        @db.VarChar(11)
+  iban        String        @db.VarChar(35)
+  address     String        @db.VarChar(80)
+  city        String        @db.VarChar(50)
+  property    Property      @relation(fields: [propertyId], references: [id], map: "Renter_propertyId_fkey")
+  reservation Reservation[]
+
+  @@index([propertyId], map: "Renter_propertyId_fkey")
+}
+
+model Reservation {
+  id                     Int                      @id @default(autoincrement())
+  renterId               Int
+  startDate              DateTime                 @db.Date
+  endDate                DateTime                 @db.Date
+  source                 Reservation_Source
+  amount                 Decimal
+  bookingDate            DateTime                 @db.Date
+  description            String                   @db.VarChar(500)
+  guestEmail             String                   @db.VarChar(80)
+  guestName              String                   @db.VarChar(50)
+  guestPhone             String                   @db.VarChar(20)
+  paymentType            Reservation_PaymentType
+  persons                String                   @db.VarChar(5)
+  propertyId             Int
+  status                 Reservation_Status
+  vrboReservationId      String?                  @unique(map: "Reservation_vrboReservationId_key") @db.VarChar(30)
+  property               Property                 @relation(fields: [propertyId], references: [id], map: "Reservation_propertyId_fkey")
+  renter                 Renter                   @relation(fields: [renterId], references: [id], map: "Reservation_renterId_fkey")
+  payment                Payment[]
+  reservation_assistance Reservation_Assistance[]
+  reservation_provision  Reservation_Provision[]
+  reservation_utility    Reservation_Utility[]
+
+  @@index([propertyId], map: "Reservation_propertyId_fkey")
+  @@index([renterId], map: "Reservation_renterId_fkey")
+}
+
+model Reservation_Assistance {
+  reservationId Int
+  assistanceId  Int
+  startDate     DateTime                           @db.Date
+  endDate       DateTime                           @db.Date
+  price         Decimal
+  amountPaid    Decimal?
+  paymentType   Reservation_Assistance_PaymentType
+  notes         String                             @db.VarChar(2000)
+  assistance    Assistance                         @relation(fields: [assistanceId], references: [id], map: "Reservation_Assistance_assistanceId_fkey")
+  reservation   Reservation                        @relation(fields: [reservationId], references: [id], map: "Reservation_Assistance_reservationId_fkey")
+
+  @@id([reservationId, assistanceId])
+  @@index([assistanceId], map: "Reservation_Assistance_assistanceId_fkey")
+}
+
+model Reservation_Provision {
+  reservationId Int
+  provisionId   Int
+  provision     Provision   @relation(fields: [provisionId], references: [id], map: "Reservation_Provision_provisionId_fkey")
+  reservation   Reservation @relation(fields: [reservationId], references: [id], map: "Reservation_Provision_reservationId_fkey")
+
+  @@id([reservationId, provisionId])
+  @@index([provisionId], map: "Reservation_Provision_provisionId_fkey")
+}
+
+model Reservation_Utility {
+  reservationId Int
+  utilityId     Int
+  startValue    Decimal
+  endValue      Decimal
+  reservation   Reservation @relation(fields: [reservationId], references: [id], map: "Reservation_Utility_reservationId_fkey")
+  utility       Utility     @relation(fields: [utilityId], references: [id], map: "Reservation_Utility_utilityId_fkey")
+
+  @@id([reservationId, utilityId])
+  @@index([utilityId], map: "Reservation_Utility_utilityId_fkey")
+}
+
+model Utility {
+  id                  Int                   @id @default(autoincrement())
+  name                String
+  unitPrice           Decimal
+  reservation_utility Reservation_Utility[]
+}
+
+enum Expense_Type {
+  HOSPITALITY
+  HOUSE
+  POOL
+  GRILL
+  OTHER
+}
+
+enum Reservation_Source {
+  VRBO
+  GOOGLE
+  REFERRAL
+  DIRECT_CONTACT
+  OLD_GUEST
+  OTHER
+}
+
+enum Reservation_Assistance_PaymentType {
+  CASH
+  BANK_TRANSFER
+  PARTNER
+}
+
+enum Reservation_PaymentType {
+  CASH
+  BANK_TRANSFER
+  PARTNER
+}
+
+enum Reservation_Status {
+  IN_PROGRESS
+  BOOKED
+  CANCELLED
+}

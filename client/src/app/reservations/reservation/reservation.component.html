@@ -1,0 +1,145 @@
+<div class="w-full flex flex-col dark:text-white" *ngIf="!smallScreen">
+    <div class="flex flex-row w-full h-10  flex-auto">
+        <div class="flex-1 flex items-center pl-3 mr-3">
+            {{reservationData.renterName}}
+        </div>
+        <div class="flex-1 flex items-center pl-3" *ngIf="columnCarouselService.columnDisplayed(0)">
+            {{reservationData.startDate | date: 'dd/MM/yyyy'}}
+        </div>
+        <div class="flex-1 flex items-center pl-3" *ngIf="columnCarouselService.columnDisplayed(1)">
+            {{reservationData.endDate | date: 'dd/MM/yyyy'}}
+        </div>
+        <div class="flex-1 flex items-center pl-3" *ngIf="columnCarouselService.columnDisplayed(2)">
+            {{reservationData.guestName}}
+        </div>
+        <div class="flex-1 flex items-center pl-3" *ngIf="columnCarouselService.columnDisplayed(3)">
+            {{reservationData.persons}}
+        </div>
+        <div class="flex-1 flex items-center pl-3" *ngIf="columnCarouselService.columnDisplayed(4)">
+            {{ reservationData.amount | priceFormat }}€
+        </div>
+        <div class="flex-1 flex items-center pl-3" *ngIf="columnCarouselService.columnDisplayed(5)">
+            {{getReservationConstantValue("PAYMENT_TYPE", reservationData.paymentType)}}
+        </div>
+        <div class="flex-1 flex items-center pl-3" *ngIf="columnCarouselService.columnDisplayed(6)">
+            {{getReservationConstantValue("STATUS", reservationData.status)}}
+        </div>
+    </div>
+    <div class="flex flex-col pt-2 pb-2" *ngIf="isSelected">
+        <div class="w-[95%] border-t-[1px] border-primary dark:border-white pt-2 ml-3"></div>
+        <div class="flex flex-col lg:flex-row">
+            <div class="flex flex-col flex-1 w-full lg:w-auto mb-1">
+                <div class="flex flex-row w- full flex-none pl-3 mb-1">
+                    Booked on: {{reservationData.bookingDate | date: 'dd/MM/yyyy'}}
+                </div>
+                <div class="flex flex-row w- full flex-none pl-3 mb-1">
+                    Source: {{getReservationConstantValue("SOURCE", reservationData.reservationSource)}} <span class="ml-1" *ngIf="reservationData.reservationSource == 'VRBO'">({{reservationData.vrboReservationId}})</span>
+                </div>            
+                <div class="flex-1 flex items-center pl-3   ">
+                    Payout: {{ reservationData.payout | priceFormat }}€ <span *ngIf="reservationData.paymentCompleted()" class="ml-2 italic">(Completed)</span>
+                </div>
+            </div>
+            <div class="flex flex-col flex-1 w-full lg:w-auto">
+                <div class="flex flex-row w- full flex-none pl-3 mb-1">
+                    Phone: {{reservationData.guestPhone}}
+                </div>
+                <div class="flex flex-row w- full flex-none pl-3 mb-1">
+                    Email: {{reservationData.guestEmail}}
+                </div>
+            </div>
+            <div class="flex flex-col w-full lg:w-2/5 h-full break-words pl-3">
+                Description: {{reservationData.description}}
+            </div>
+        </div>
+    </div>
+</div>
+<div *ngIf="smallScreen" class="w-full border-2 border-secondary dark:border-white hover:cursor-pointer hover:bg-gray-200 dark:hover:bg-secondary dark:text-white flex flex-col mb-2 mr-2">
+    <div class="flex flex-row h-8 text-lg p-2 w-full font-semibold">
+        <div class="flex flex-col flex-auto justify-center">
+            {{reservationData.guestName}}
+        </div>
+        <div class="flex flex-col justify-center ml-auto">
+            {{reservationData.amount | priceFormat }}€
+        </div>
+    </div>
+    <div class="flex flex-row pl-2 pb-3 text-lg items-center w-full">
+        <div class="flex flex-col flex-auto justify-center pr-3">
+            {{ reservationData.startDate  | date: 'dd/MM/yyyy' }} - {{ reservationData.endDate  | date: 'dd/MM/yyyy' }}
+        </div>
+        <div class="flex flex-col justify-center ml-auto">
+            <div class="flex flex-row w-[7.25rem]">
+                <div class="flex flex-col">
+                    <div class="flex flex-row">
+                        <i class="fa-solid fa-moon text-secondary mr-1 mt-[0.35rem]"></i>
+                        {{ getNumberOfNights() }}
+                    </div>
+                </div>
+                <div class="flex flex-col ml-4">
+                    <div class="flex flex-row">
+                        <i class="fa-solid fa-user fa-sm text-secondary mr-1 mt-[0.8rem]"></i>
+                        {{ reservationData.persons }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="flex flex-row border-b-2 border-primary w-[90%] ml-2 mx-auto mb-3" *ngIf="isSelected"></div>
+    <div class="flex flex-col pl-4 pb-2" *ngIf="isSelected">
+        <div class="flex flex-row w-2/3">
+            <div class="flex flex-col flex-1 font-medium text-gray-800">
+                Renter:
+            </div>
+            <div class="flex flex-col flex-1">
+                {{reservationData.renterName}}
+            </div>
+        </div>
+        <div class="flex flex-row w-2/3">
+            <div class="flex flex-col flex-1 font-medium text-gray-800">
+                Guest phone:
+            </div>
+            <div class="flex flex-col flex-1">
+                {{reservationData.guestPhone}}
+            </div>
+        </div>
+        <div class="flex flex-row w-2/3">
+            <div class="flex flex-col flex-1 font-medium text-gray-800">
+                Booked on:
+            </div>
+            <div class="flex flex-col flex-1">
+                {{reservationData.bookingDate | date: 'dd/MM/yyyy'}}
+            </div>
+        </div>
+        <div class="flex flex-row w-2/3">
+            <div class="flex flex-col flex-1 font-medium text-gray-800">
+                Source:
+            </div>
+            <div class="flex flex-col flex-1">
+                {{getReservationConstantValue("SOURCE", reservationData.reservationSource)}} <span class="ml-1" *ngIf="reservationData.reservationSource == 'VRBO'">({{reservationData.vrboReservationId}})</span>
+            </div>
+        </div>
+        <div class="flex flex-row w-2/3">
+            <div class="flex flex-col flex-1 font-medium text-gray-800">
+                Status:
+            </div>
+            <div class="flex flex-col flex-1">
+                {{getReservationConstantValue("STATUS", reservationData.status)}}
+            </div>
+        </div>
+        <div class="flex flex-row w-2/3">
+            <div class="flex flex-col flex-1 font-medium text-gray-800">
+                Payment type:
+            </div>
+            <div class="flex flex-col flex-1">
+                {{getReservationConstantValue("PAYMENT_TYPE", reservationData.paymentType)}}
+            </div>
+        </div>
+        <div class="flex flex-row w-full mb-4">
+            <div class="flex flex-col font-medium text-gray-800 w-1/3">
+                Payout:
+            </div>
+            <div class="flex flex-row w-2/3">
+                {{ reservationData.payout | priceFormat }}€ <span *ngIf="reservationData.paymentCompleted()" class="ml-2 italic">(Completed)</span>
+            </div>
+        </div>
+    </div>
+</div>

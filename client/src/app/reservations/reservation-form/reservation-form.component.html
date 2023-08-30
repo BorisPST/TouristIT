@@ -1,0 +1,113 @@
+<div class="w-4/5 xl:w-3/5 h-auto mt-5 ml-10  p-5 flex flex-col">
+    <div class="text-2xl font-medium" *ngIf="isNewReservation">
+        New Reservation
+    </div>
+    <div class="text-2xl font-medium" *ngIf="!isNewReservation">
+        Edit Reservation
+    </div>
+    <div class="w-[32.5rem] border-b border-2 mt-2"></div>
+    <div class="flex flex-row mt-5 flex-wrap">
+        <form (ngSubmit)="onSubmit()" [formGroup]="reservationForm" class="flex flex-col w-full">
+            <div class="flex flex-row w-full flex-wrap" formGroupName="reservationDateInformation">
+                <div class="flex flex-col mr-3 mb-5">
+                    <div class="flex flex-row ml-2 mb-1 font-medium text-[13px]">Start date</div>
+                    <div class="flex flex-row items-center">
+                        <input required  formControlName="startDate" type="date" class="border-gray-200 outline-tertiary border-2 rounded pl-3 ml-2 h-10 w-40">
+                    </div>
+                </div>
+                <div class="flex flex-col mr-3 mb-5">
+                    <div class="flex flex-row ml-2 mb-1 font-medium text-[13px]">End date</div>
+                    <div class="flex flex-row items-center">
+                        <input required  formControlName="endDate" type="date" class="border-gray-200 outline-tertiary border-2 rounded pl-3 ml-2 h-10 w-40">
+                    </div>
+                </div>
+            </div>
+            <div class="flex flex-row w-full flex-wrap">
+                <div class="flex flex-col mr-3 mb-5">
+                    <div class="flex flex-row ml-2 mb-1 font-medium text-[13px]">Guest name</div>
+                    <div class="flex flex-row items-center">
+                        <input required  formControlName="guestName" type="text" class="border-gray-200 outline-tertiary border-2 rounded pl-3 ml-2 h-10 w-[21.25rem]">
+                    </div>
+                </div>
+            </div>
+            <div class="flex flex-row w-full flex-wrap" formGroupName="guestContactInformation">
+                <div class="flex flex-col mr-3 mb-5">
+                    <div class="flex flex-row ml-2 mb-1 font-medium text-[13px]">Guest email</div>
+                    <div class="flex flex-row items-center">
+                        <input required  formControlName="guestEmail" type="email" class="border-gray-200 outline-tertiary border-2 rounded pl-3 ml-2 h-10 w-[21.25rem]">
+                    </div>
+                </div>
+                <div class="flex flex-col mr-3 mb-5">
+                    <div class="flex flex-row ml-2 mb-1 font-medium text-[13px]">Guest phone</div>
+                    <div class="flex flex-row items-center">
+                        <input required  formControlName="guestPhone" type="tel" class="border-gray-200 outline-tertiary border-2 rounded pl-3 ml-2 h-10 w-40">
+                    </div>
+                </div>
+            </div>
+            <div class="flex flex-row w-full flex-wrap">
+                <div class="flex flex-col mb-5">
+                    <div class="flex flex-row ml-2 mb-1 font-medium text-[13px]">Persons</div>
+                    <div class="flex flex-row items-center">
+                        <input required  formControlName="persons" type="text" class="border-gray-200 outline-tertiary border-2 rounded pl-3 ml-2 h-10 w-40">
+                    </div>
+                </div>
+            </div>
+            <div class="flex flex-row w-full flex-wrap">
+                <div class="flex flex-col mb-5 mr-3">
+                    <div class="flex flex-row ml-2 mb-1 font-medium text-[13px]">Amount</div>
+                    <div class="flex flex-row items-center">
+                        <i class="fa-solid fa-euro-sign fa-sm absolute ml-5"></i>
+                        <input required  formControlName="amount" type="number" class="border-gray-200 outline-tertiary border-2 rounded pl-6 ml-2 h-10 w-40">
+                    </div>
+                </div>
+                <app-form-dropdown [values]="paymentTypes" initialValue="{{reservationData.paymentType}}" title="Payment Type" [parentFormGroup]="reservationForm" controlName="paymentType"></app-form-dropdown>
+            </div>
+            <div class="flex flex-row w-full flex-wrap">
+                <app-form-dropdown [values]="reservationStatuses" initialValue="{{reservationData.status}}" title="Status" [parentFormGroup]="reservationForm" controlName="status"></app-form-dropdown>
+            </div>
+            <div class="flex flex-row w-full flex-wrap">
+                <div class="flex flex-col mr-3 mb-5">
+                    <div class="flex flex-row ml-2 mb-1 font-medium text-[13px]">Renter</div>
+                    <div [ngClass]="{'rounded-b-none': renterDropdownOpen}" class="border-gray-200 outline-tertiary rounded border-2 ml-2 h-10 w-[21.25rem] flex flex-row items-center hover:cursor-pointer" (click)="renterDropdownOpen = !renterDropdownOpen">
+                        <input required formControlName="renter" type="text" class="pl-3 h-8 w-32 border-none outline-none hover:cursor-pointer bg-white" readonly>
+                        <i class="fa-solid fa-angle-down fa-xs lg:fa-sm pl-1 pt-3 pr-1 ml-auto"></i>
+                    </div>
+                    <div *ngIf="renterDropdownOpen" class="flex flex-col absolute z-50 mt-16 ml-2 w-[21.25rem] border-t-2 border-gray-200">
+                        <div [ngClass]="{'rounded-b': i == renters.length - 1}" class="pl-3 h-10 flex flex-row items-center w-full bg-white border-r-2 border-l-2 border-b-2 border-gray-200 hover:bg-gray-100 hover:cursor-pointer" *ngFor="let renter of renters; index as i" (click)="selectRenter(renter)">{{renter["name"]}}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="flex flex-row w-full flex-wrap">
+                <app-form-dropdown [values]="reservationSources" initialValue="{{reservationData.reservationSource}}" title="Source" [parentFormGroup]="reservationForm" controlName="source"></app-form-dropdown>
+
+                <div class="flex flex-col mr-3 mb-5">
+                    <div class="flex flex-row ml-2 mb-1 font-medium text-[13px]">Booking date</div>
+                    <div class="flex flex-row items-center">
+                        <input formControlName="bookingDate" type="date" class="border-gray-200 outline-tertiary border-2 rounded pl-3 ml-2 h-10 w-40">
+                    </div>
+                </div>
+            </div>
+            <div class="flex flex-row w-full flex-wrap" *ngIf="reservationForm.value.source == 'Vrbo'">
+                <div class="flex flex-col mr-3 mb-5">
+                    <div class="flex flex-row ml-2 mb-1 font-medium text-[13px]">Vrbo ID</div>
+                    <div class="flex flex-row items-center">
+                        <input formControlName="vrboId" type="text" class="border-gray-200 outline-tertiary border-2 rounded pl-3 ml-2 h-10 w-40">
+                    </div>
+                </div>
+            </div>
+            <div class="flex flex-row w-full">
+                <div class="flex flex-col mr-3 mb-5">
+                    <div class="flex flex-row ml-2 mb-1 font-medium text-[13px]">Description</div>
+                    <div class="flex flex-row">
+                        <textarea formControlName="description" class="border-gray-200 outline-tertiary border-2 rounded pl-3 ml-2 h-20 w-[32.5rem]"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex flex-row mt-10 w-[32.5rem]">
+                <div class="flex flex-col ">
+                    <button class="w-24 h-10 rounded bg-tertiary text-gray-100 hover:bg-tertiary-dark hover:text-white disabled:opacity-60 disabled:hover:bg-tertiary disabled:hover:text-gray-100" type="submit" [disabled]="!reservationForm.valid">Save</button>
+                </div>
+            </div>
+        </form>
+</div>  
