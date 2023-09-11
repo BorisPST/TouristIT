@@ -19,7 +19,7 @@ export class AppComponent {
 
   constructor() {
     this.screenWidth = window.innerWidth
-    this.selectedSection = "home"
+    this.selectedSection = "reservations"
   }
 
   toggleDarkMode() {

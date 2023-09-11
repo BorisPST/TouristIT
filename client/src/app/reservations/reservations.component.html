@@ -1,14 +1,14 @@
 <div class="w-full h-screen mt-10 flex flex-col" *ngIf="!reservationFormOpen">
     <div class="flex flex-row w-11/12 lg:w-full pr-10 ml-5 lg:ml-10">
         <div class="flex flex-col w-16 lg:w-20">
-            <div class="bg-gray-300 dark:bg-primary h-8 lg:h-10 flex justify-center items-center hover:cursor-pointer" (click)="yearsDropdownOpen = !yearsDropdownOpen">
-                <div class="lg:text-lg text-gray-500 leading-[2rem] lg:leading-[2.5rem] ml-3">{{yearsArray[currentYearIndex]}}</div>
+            <div class="bg-secondary dark:bg-primary h-8 lg:h-10 flex justify-center items-center hover:cursor-pointer" (click)="yearsDropdownOpen = !yearsDropdownOpen">
+                <div class="lg:text-lg text-white leading-[2rem] lg:leading-[2.5rem] ml-3">{{yearsArray[currentYearIndex]}}</div>
                 <i class="fa-solid fa-angle-down fa-xs lg:fa-sm text-primary pl-1 pt-3"></i>
             </div>
-            <div *ngIf="yearsDropdownOpen" class="flex flex-col w-16 lg:w-20 justify-center absolute z-50 mt-8 lg:mt-10 border-b-2 border-gray-300 dark:border-primary">
-                <div class="w-16 lg:w-20 flex justify-center lg:text-lg text-gray-300 leading-[2rem] lg:leading-[2.5rem] border-solid border-l-2 border-r-2 border-gray-300 dark:border-primary dark:text-primary" 
+            <div *ngIf="yearsDropdownOpen" class="flex flex-col w-16 lg:w-20 justify-center absolute z-50 mt-8 lg:mt-10 border-b-2 border-secondary dark:border-primary">
+                <div class="w-16 lg:w-20 flex justify-center lg:text-lg text-secondary leading-[2rem] lg:leading-[2.5rem] border-solid border-l-2 border-r-2 border-secondary dark:border-primary dark:text-primary" 
                 *ngFor="let year of yearsArray; index as i">
-                    <div class="w-16 lg:w-20 text-center hover:cursor-pointer bg-white dark:bg-primary-dark hover:bg-gray-200 dark:hover:bg-secondary hover:text-gray-500 dark:hover:text-primary-semidark" 
+                    <div class="w-16 lg:w-20 text-center hover:cursor-pointer bg-white dark:bg-primary-dark hover:bg-gray-200 dark:hover:bg-secondary hover:text-secondary-dark dark:hover:text-primary-semidark" 
                         *ngIf="i != currentYearIndex"
                         (click)="selectYear(i)" >
                         {{year}}
@@ -16,11 +16,11 @@
                 </div>
             </div>
         </div>
-        <input [(ngModel)]="inputQuery" type="text" placeholder="Search for reservations" class="border-solid border-2 border-gray-300 dark:border-primary outline-gray-300 dark:outline-primary text-secondary dark:text-white dark:bg-primary-dark w-[20rem] lg:w-[30rem] h-8 lg:h-10 pl-2 ml-5">
+        <input [(ngModel)]="inputQuery" type="text" placeholder="Search for reservations" class="border-solid border-2 border-secondary dark:border-primary outline-secondary dark:outline-primary text-secondary dark:text-white dark:bg-primary-dark w-[20rem] lg:w-[30rem] h-8 lg:h-10 pl-2 ml-5">
         <div class="ml-5 flex flex-row">
             <div class="flex flex-col w-10 min-[1250px]:w-20 mr-4">
-                <div class="bg-gray-300 dark:bg-primary h-8 lg:h-10 flex justify-center items-center hover:cursor-pointer" (click)="createNewReservation()">
-                    <div class="lg:text-lg text-gray-500 leading-[2rem] lg:leading-[2.5rem] hidden min-[1250px]:block">New</div>
+                <div class="bg-secondary dark:bg-primary h-8 lg:h-10 flex justify-center items-center hover:cursor-pointer" (click)="createNewReservation()">
+                    <div class="lg:text-lg text-white leading-[2rem] lg:leading-[2.5rem] hidden min-[1250px]:block">New</div>
                     <i class="fa-solid fa-plus text-primary min-[1250px]:pl-2"></i>
                 </div>
             </div>
